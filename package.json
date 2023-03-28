@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "A remote desktop application based on Electron with Vue and TypeScript",
   "main": "./out/main/index.js",
-  "author": "jackeyzhao",
+  "author": "zhaojie",
   "homepage": "https://www.electronjs.org",
   "scripts": {
     "format": "prettier --write .",

@@ -11,7 +11,7 @@ const remotePeerId = ref('');
         <el-input v-model="remotePeerId" placeholder="请输入受控端ID" />
       </el-main>
       <el-footer>
-        <el-text class="mx-1" type="default">powered by zhaojie</el-text>
+        <el-text class="mx-1">powered by zhaojie</el-text>
       </el-footer>
     </el-container>
   </div>
