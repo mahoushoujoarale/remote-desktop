@@ -1,13 +1,9 @@
 body {
-  display: flex;
-  flex-direction: column;
   font-family: Roboto, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'Segoe UI', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Open Sans', sans-serif;
-  color: #86a5b1;
-  background-color: #2f3241;
-}
-
-* {
-  padding: 0;
+  background-image: url(../backgroundImage.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
   margin: 0;
 }
