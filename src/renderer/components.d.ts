@@ -9,11 +9,24 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElButton: typeof import('element-plus/es')['ElButton']
     ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElHeader: typeof import('element-plus/es')['ElHeader']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElText: typeof import('element-plus/es')['ElText']
+    Home: typeof import('./src/components/Home/index.vue')['default']
+    LevitatingBall: typeof import('./src/components/LevitatingBall/index.vue')['default']
+    Main: typeof import('./src/components/Main/index.vue')['default']
+    RemoteWindow: typeof import('./src/components/RemoteWindow/index.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
+    SessionInfo: typeof import('./src/components/SessionInfo/index.vue')['default']
   }
 }
