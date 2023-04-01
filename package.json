@@ -24,7 +24,8 @@
     "@electron-toolkit/utils": "^1.0.2",
     "@element-plus/icons-vue": "^2.1.0",
     "element-plus": "^2.3.1",
-    "peerjs": "^1.4.7"
+    "peerjs": "^1.4.7",
+    "robotjs": "^0.6.0"
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",

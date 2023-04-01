@@ -1,12 +1,35 @@
-import { contextBridge, ipcRenderer } from 'electron';
+import { DesktopCapturerSource, contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
+import { getStreamById } from './util';
+import { IApi } from './type';
+import { IKeyboardData, IMouseData } from '../main/type';
+
+const setRemoteVideo = async (event, sourceId: DesktopCapturerSource) => {
+  const stream = await getStreamById(sourceId);
+  const video: HTMLVideoElement | null = document.querySelector('#remote-video');
+  if (video) {
+    video.srcObject = stream;
+    video.onloadedmetadata = (e) => video.play();
+  }
+};
 
 // Custom APIs for renderer
-const api = {};
+const api: IApi = {
+  handleConnect: () => {
+    ipcRenderer.send('session-connect');
+    ipcRenderer.on('set-remote-video', setRemoteVideo);
+  },
+  handleDisconnect: () => {
+    ipcRenderer.removeListener('set-remote-video', setRemoteVideo);
+  },
+  handleMouse: (data: IMouseData) => {
+    ipcRenderer.send('mouse-event', data);
+  },
+  handleKeyboard: (data: IKeyboardData) => {
+    ipcRenderer.send('keyboard-event', data);
+  },
+};
 
-// Use `contextBridge` APIs to expose Electron APIs to
-// renderer only if context isolation is enabled, otherwise
-// just add to the DOM global.
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI);
@@ -19,35 +42,4 @@ if (process.contextIsolated) {
   window.electron = electronAPI;
   // @ts-ignore (define in dts)
   window.api = api;
-}
-
-ipcRenderer.on('SET_SOURCE', async (event, sourceId) => {
-  try {
-    const stream = await navigator.mediaDevices.getUserMedia({
-      audio: false,
-      video: {
-        mandatory: {
-          chromeMediaSource: 'desktop',
-          chromeMediaSourceId: sourceId,
-          minWidth: 1280,
-          maxWidth: 1280,
-          minHeight: 720,
-          maxHeight: 720,
-        },
-      },
-    });
-    handleStream(stream);
-  } catch (e) {
-    handleError(e);
-  }
-});
-
-function handleStream(stream) {
-  const video = document.querySelector('video');
-  video.srcObject = stream;
-  video.onloadedmetadata = (e) => video.play();
-}
-
-function handleError(e) {
-  console.log(e);
 }
