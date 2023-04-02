@@ -29,13 +29,13 @@ const handleKeyDown = (event) => {
 
 onMounted(() => {
   video.value?.addEventListener('click', handleMouseClick);
-  window.addEventListener('wheel', handleScroll);
-  window.addEventListener('keydown', handleKeyDown);
+  document.addEventListener('wheel', handleScroll);
+  document.addEventListener('keydown', handleKeyDown);
 });
 onBeforeUnmount(() => {
   video.value?.removeEventListener('click', handleMouseClick);
-  window.removeEventListener('wheel', handleScroll);
-  window.removeEventListener('keydown', handleKeyDown);
+  document.removeEventListener('wheel', handleScroll);
+  document.removeEventListener('keydown', handleKeyDown);
 });
 </script>
 

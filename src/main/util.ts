@@ -16,9 +16,9 @@ export const getDesktopCaptureSource = async () => {
 };
 
 export const doMouseClick = (data: IMouseClickData) => {
-  const { offset, video, screen } = data;
-  const x: number = offset.x * screen.width / video.width;
-  const y: number = offset.y * screen.height / video.height;
+  const { offset, video } = data;
+  const x: number = offset.x / video.width * robot.getScreenSize().width;
+  const y: number = offset.y / video.height * robot.getScreenSize().height;
   robot.moveMouse(x, y);
   robot.mouseClick();
 };
