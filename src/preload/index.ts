@@ -11,6 +11,10 @@ const api: IApi = {
     return getStreamBySources(sources);
   },
   doMouseClick: (data: IMouseClickData) => {
+    data.screen = {
+      width: window.screen.width,
+      height: window.screen.height,
+    };
     ipcRenderer.send('mouse-click', data);
   },
   doScroll: (data: IScrollData) => {

@@ -1,4 +1,4 @@
-import { desktopCapturer, screen } from "electron";
+import { desktopCapturer } from "electron";
 import { IKeyDownData, IMouseClickData, IScrollData } from "./type";
 import robot from 'robotjs';
 
@@ -16,10 +16,9 @@ export const getDesktopCaptureSource = async () => {
 };
 
 export const doMouseClick = (data: IMouseClickData) => {
-  const { offset, video } = data;
-  const { width: screenWidth, height: screenHeight } = screen.getPrimaryDisplay().size;
-  const x: number = offset.x * screenWidth / video.width;
-  const y: number = offset.y * screenHeight / video.height;
+  const { offset, video, screen } = data;
+  const x: number = offset.x * screen.width / video.width;
+  const y: number = offset.y * screen.height / video.height;
   robot.moveMouse(x, y);
   robot.mouseClick();
 };
@@ -35,5 +34,6 @@ export const doKeyDown = (data: IKeyDownData) => {
   if (data.ctrl) modifiers.push('ctrl');
   if (data.alt) modifiers.push('alt');
   if (data.meta) modifiers.push('meta');
-  robot.keyTap(data.key, modifiers);
+  const key = data.key.toLowerCase();
+  robot.keyTap(key, modifiers);
 };

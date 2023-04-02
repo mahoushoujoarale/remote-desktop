@@ -94,8 +94,8 @@ onMounted(() => {
   socket.on('mouseclick', (data: IMouseClickData) => {
     window.api.doMouseClick(data);
   });
-  socket.on('scroll', () => {
-    // todo: 处理滚动
+  socket.on('scroll', (data: IScrollData) => {
+    window.api.doScroll(data);
   });
   socket.on('keydown', (data: IKeyDownData) => {
     window.api.doKeyDown(data);
