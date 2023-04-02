@@ -1,8 +1,9 @@
-import { IMouseData, IKeyboardData } from "./type";
+import { socket } from "@renderer/socket";
+import { IMouseClickData, IKeyDownData } from "./type";
 
-export const handleMouse = (event: MouseEvent) => {
+export const handleMouseClick = (event: MouseEvent) => {
   const video = event.target as HTMLVideoElement;
-  const data: IMouseData = {
+  const data: IMouseClickData = {
     offset: {
       x: event.offsetX,
       y: event.offsetY,
@@ -12,16 +13,16 @@ export const handleMouse = (event: MouseEvent) => {
       height: video.offsetHeight,
     },
   };
-  window.api.handleMouse(data);
+  socket.emit('mouseclick', data);
 };
 
 export const handleKey = (event: KeyboardEvent) => {
-  const data: IKeyboardData = {
+  const data: IKeyDownData = {
     key: event.key,
     shift: event.shiftKey,
     meta: event.metaKey,
     ctrl: event.ctrlKey,
     alt: event.altKey,
   };
-  window.api.handleKeyboard(data);
+  socket.emit('keydown', data);
 };

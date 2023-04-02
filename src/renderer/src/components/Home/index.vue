@@ -2,25 +2,38 @@
 import { ref } from 'vue';
 
 const props = defineProps<{
-  peerId: string;
+  userId: string;
 }>();
 const emit = defineEmits<{
-  (e: 'handleConnect', remotePeerId: string): void;
+  (e: 'handleConnect', remoteId: string): void;
 }>();
 
-const remotePeerId = ref('');
+const remoteId = ref('');
+const tipsContent = ref('点击复制');
 
 const handleConnect = () => {
-  window.api.handleConnect();
-  emit('handleConnect', remotePeerId.value);
+  emit('handleConnect', remoteId.value);
 };
+const handleCopy = () => {
+  try {
+    navigator.clipboard.writeText(props.userId);
+    tipsContent.value = '已复制';
+  } catch (error) {
+    console.log(error);
+  }
+}
 </script>
 
 <template>
   <el-container>
     <el-main>
-      <el-text class="mx-1">你的连接ID：{{ peerId }}</el-text>
-      <el-input v-model="remotePeerId" placeholder="请输入受控端ID" @keyup.enter="handleConnect" />
+      <div class="tips">
+        <el-text class="mx-1">你的连接ID：</el-text>
+        <el-tooltip class="box-item" effect="dark" :content="tipsContent" placement="top">
+          <el-text class="mx-1" style="cursor: pointer" @click="handleCopy">{{ userId }}</el-text>
+        </el-tooltip>
+      </div>
+      <el-input v-model="remoteId" placeholder="请输入受控端ID" @keyup.enter="handleConnect" />
     </el-main>
     <el-footer>
       <el-text class="mx-1">powered by zhaojie</el-text>
@@ -42,10 +55,13 @@ const handleConnect = () => {
   justify-content: center;
   align-items: center;
 
+  .tips {
+    margin-bottom: 20px;
+  }
+
   .el-text {
     color: #f3f3f3;
     font-size: 24px;
-    margin-bottom: 20px;
   }
 }
 .el-footer {

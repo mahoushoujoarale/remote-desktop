@@ -1,6 +1,6 @@
 import { DesktopCapturerSource } from "electron";
 
-export async function getStreamById(id: DesktopCapturerSource) {
+export async function getStreamBySources(sources: DesktopCapturerSource[]) {
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
       audio: false,
@@ -8,7 +8,7 @@ export async function getStreamById(id: DesktopCapturerSource) {
         // @ts-ignore electron不支持
         mandatory: {
           chromeMediaSource: 'desktop',
-          chromeMediaSourceId: id,
+          chromeMediaSourceId: sources[0].id,
         },
       },
     });

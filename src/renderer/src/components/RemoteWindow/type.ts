@@ -1,5 +1,5 @@
 
-export interface IMouseData {
+export interface IMouseClickData {
   offset: {
     x: number,
     y: number,
@@ -10,7 +10,7 @@ export interface IMouseData {
   },
 }
 
-export interface IKeyboardData {
+export interface IKeyDownData {
   key: string,
   meta: boolean,
   alt: boolean,

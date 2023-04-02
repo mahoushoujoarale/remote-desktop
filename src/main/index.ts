@@ -3,7 +3,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
-import { getDesktopCaptureSource, handleKey, handleMouse } from './util';
+import { getDesktopCaptureSource } from './util';
+ipcMain.handle('getDesktopCaptureSource', getDesktopCaptureSource)
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -51,20 +52,20 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  ipcMain.on('session-connect', async (event) => {
-    const sources = await getDesktopCaptureSource();
-    if (sources.length) {
-      event.sender.send('set-remote-video', sources[0].id);
-    }
-  });
+  // ipcMain.on('session-connect', async (event) => {
+  //   const sources = await getDesktopCaptureSource();
+  //   if (sources.length) {
+  //     event.sender.send('set-remote-video', sources[0].id);
+  //   }
+  // });
 
-  ipcMain.on('mouse-event', (event, data: IMouseData) => {
-    handleMouse(data);
-  });
+  // ipcMain.on('mouse-event', (event, data: IMouseData) => {
+  //   handleMouse(data);
+  // });
 
-  ipcMain.on('keyboard-event', (event, data: IKeyboardData) => {
-    handleKey(data);
-  });
+  // ipcMain.on('keyboard-event', (event, data: IKeyboardData) => {
+  //   handleKey(data);
+  // });
 });
 
 app.on('window-all-closed', () => {

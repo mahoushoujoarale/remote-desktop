@@ -21,6 +21,7 @@ declare module '@vue/runtime-core' {
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMain: typeof import('element-plus/es')['ElMain']
     ElText: typeof import('element-plus/es')['ElText']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     Home: typeof import('./src/components/Home/index.vue')['default']
     LevitatingBall: typeof import('./src/components/LevitatingBall/index.vue')['default']
     Main: typeof import('./src/components/Main/index.vue')['default']
