@@ -1,5 +1,8 @@
+import { IKeyDownData, IMouseClickData, IScrollData } from "../main/type";
+
 export interface IApi {
-  handleMouse: (data) => void;
-  handleKeyboard: (data) => void;
   getMediaStream: () => Promise<MediaStream | null>;
+  doMouseClick: (data: IMouseClickData) => void;
+  doScroll: (data: IScrollData) => void;
+  doKeyDown: (data: IKeyDownData) => void;
 }

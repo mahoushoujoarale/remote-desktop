@@ -3,11 +3,9 @@ import { onMounted, ref } from 'vue';
 import Home from './components/Home/index.vue';
 import RemoteWindow from './components/RemoteWindow/index.vue';
 import LevitatingBall from './components/LevitatingBall/index.vue';
-import { socket } from './socket';
-import Peer, { MediaConnection } from 'peerjs';
-import { ElLoading } from 'element-plus';
-import { doMouseClick, doKeyDown } from './util';
-import { IMouseClickData, IKeyDownData } from './components/RemoteWindow/type';
+import { MediaConnection } from 'peerjs';
+import { socket, peer } from './util';
+import { IMouseClickData, IKeyDownData, IScrollData } from './components/RemoteWindow/type';
 import { ConnectionType } from './type';
 
 // 这俩是用来远程连接的id
@@ -16,7 +14,6 @@ const remoteId = ref('');
 // 这是peer用到的id
 const peerId = ref('');
 const showWindow = ref(false);
-const peer = ref<Peer>(new Peer());
 const call = ref<MediaConnection>();
 const videoSrcObject = ref();
 const startTime = ref(Date.now());
@@ -39,13 +36,22 @@ const handleDisconnect = (isReceived = false) => {
   connectionType.value = ConnectionType.NotConnected;
   remoteId.value = '';
 };
+const handleMouseClick = (data: IMouseClickData) => {
+  socket.emit('mouseclick', { remoteId: remoteId.value, data });
+};
+const handleScroll = (data: IScrollData) => {
+  socket.emit("scroll", { remoteId: remoteId.value, data });
+};
+const handleKeyDown = (data: IKeyDownData) => {
+  socket.emit('keydown', { remoteId: remoteId.value, data });
+};
 
 onMounted(() => {
-  peer.value.on("open", (id) => {
+  peer.on("open", (id) => {
     peerId.value = id;
     // 在没触发这个事件之前需要加loading
   });
-  peer.value.on("call", async (call) => {
+  peer.on("call", async (call) => {
     call.answer();
     call.on('stream', (stream) => {
       videoSrcObject.value = stream;
@@ -66,7 +72,7 @@ onMounted(() => {
   socket.on('remoteconnect', async (remoteInfo) => {
     const stream = await window.api.getMediaStream();
     if (stream) {
-      call.value = peer.value.call(remoteInfo.peerId, stream);
+      call.value = peer.call(remoteInfo.peerId, stream);
       remoteId.value = remoteInfo.userId;
     } else {
       socket.emit('remoteconnect_error', remoteInfo.userId);
@@ -85,15 +91,15 @@ onMounted(() => {
       call.value.close();
     }
   });
-  // socket.on('mouseclick', (data: IMouseClickData) => {
-  //   doMouseClick(data);
-  // });
-  // socket.on('scroll', () => {
-  //   // todo: 处理滚动
-  // });
-  // socket.on('keydown', (data: IKeyDownData) => {
-  //   doKeyDown(data);
-  // });
+  socket.on('mouseclick', (data: IMouseClickData) => {
+    window.api.doMouseClick(data);
+  });
+  socket.on('scroll', () => {
+    // todo: 处理滚动
+  });
+  socket.on('keydown', (data: IKeyDownData) => {
+    window.api.doKeyDown(data);
+  });
 })
 </script>
 
@@ -108,6 +114,9 @@ onMounted(() => {
       v-else
       :videoSrcObject="videoSrcObject"
       @handleDisconnect="handleDisconnect"
+      @handleMouseClick="handleMouseClick"
+      @hadnleScroll="handleScroll"
+      @handleKeyDown="handleKeyDown"
     />
     <LevitatingBall
       v-if="connectionType !== ConnectionType.NotConnected"

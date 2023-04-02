@@ -1,4 +1,3 @@
-
 export interface IMouseClickData {
   offset: {
     x: number,
@@ -8,6 +7,11 @@ export interface IMouseClickData {
     width: number,
     height: number,
   },
+}
+
+export interface IScrollData {
+  deltaX: number,
+  deltaY: number,
 }
 
 export interface IKeyDownData {

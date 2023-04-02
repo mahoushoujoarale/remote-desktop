@@ -1,16 +1,7 @@
-export enum RobotType {
-  Mouse,
-  KeyBoard,
-};
-
-export interface IMouseData {
+export interface IMouseClickData {
   offset: {
     x: number,
     y: number,
-  },
-  screen: {
-    width: number,
-    height: number,
   },
   video: {
     width: number,
@@ -18,7 +9,12 @@ export interface IMouseData {
   },
 }
 
-export interface IKeyboardData {
+export interface IScrollData {
+  deltaX: number,
+  deltaY: number,
+}
+
+export interface IKeyDownData {
   key: string,
   meta: boolean,
   alt: boolean,

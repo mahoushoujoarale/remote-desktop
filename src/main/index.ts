@@ -1,9 +1,9 @@
-import { IKeyboardData, IMouseData } from './type';
 import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
-import { getDesktopCaptureSource } from './util';
+import { doKeyDown, doMouseClick, doScroll, getDesktopCaptureSource } from './util';
+import { IKeyDownData, IMouseClickData, IScrollData } from './type';
 ipcMain.handle('getDesktopCaptureSource', getDesktopCaptureSource)
 
 function createWindow(): void {
@@ -52,20 +52,17 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  // ipcMain.on('session-connect', async (event) => {
-  //   const sources = await getDesktopCaptureSource();
-  //   if (sources.length) {
-  //     event.sender.send('set-remote-video', sources[0].id);
-  //   }
-  // });
+  ipcMain.on('mouse-click', (event, data: IMouseClickData) => {
+    doMouseClick(data);
+  });
 
-  // ipcMain.on('mouse-event', (event, data: IMouseData) => {
-  //   handleMouse(data);
-  // });
+  ipcMain.on('scroll', (event, data: IScrollData) => {
+    doScroll(data);
+  });
 
-  // ipcMain.on('keyboard-event', (event, data: IKeyboardData) => {
-  //   handleKey(data);
-  // });
+  ipcMain.on('key-down', (event, data: IKeyDownData) => {
+    doKeyDown(data);
+  });
 });
 
 app.on('window-all-closed', () => {

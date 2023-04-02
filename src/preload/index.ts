@@ -2,19 +2,22 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { getStreamBySources } from './util';
 import { IApi } from './type';
-import { IKeyboardData, IMouseData } from '../main/type';
+import { IKeyDownData, IMouseClickData, IScrollData } from '../main/type';
 
 // Custom APIs for renderer
 const api: IApi = {
-  handleMouse: (data: IMouseData) => {
-    ipcRenderer.send('mouse-event', data);
-  },
-  handleKeyboard: (data: IKeyboardData) => {
-    ipcRenderer.send('keyboard-event', data);
-  },
   getMediaStream: async () => {
     const sources = await ipcRenderer.invoke('getDesktopCaptureSource');
     return getStreamBySources(sources);
+  },
+  doMouseClick: (data: IMouseClickData) => {
+    ipcRenderer.send('mouse-click', data);
+  },
+  doScroll: (data: IScrollData) => {
+    ipcRenderer.send('scroll', data);
+  },
+  doKeyDown: (data: IKeyDownData) => {
+    ipcRenderer.send('key-down', data);
   },
 };
 
