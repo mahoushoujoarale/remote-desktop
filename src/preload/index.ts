@@ -12,8 +12,8 @@ const api: IApi = {
   },
   doMouseClick: (data: IMouseClickData) => {
     data.screen = {
-      width: window.screen.width,
-      height: window.screen.height,
+      width: window.screen.width * window.devicePixelRatio,
+      height: window.screen.height * window.devicePixelRatio,
     };
     ipcRenderer.send('mouse-click', data);
   },

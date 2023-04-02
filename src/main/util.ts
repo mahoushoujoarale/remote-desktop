@@ -35,5 +35,9 @@ export const doKeyDown = (data: IKeyDownData) => {
   if (data.alt) modifiers.push('alt');
   if (data.meta) modifiers.push('meta');
   const key = data.key.toLowerCase();
-  robot.keyTap(key, modifiers);
+  try {
+    robot.keyTap(key, modifiers);
+  } catch (error) {
+    console.log(error);
+  }
 };

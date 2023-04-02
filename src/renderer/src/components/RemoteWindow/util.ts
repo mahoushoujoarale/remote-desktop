@@ -13,8 +13,8 @@ export const getMouseClickData = (event: MouseEvent) => {
     },
     // 这里的screen应该被覆盖
     screen: {
-      width: window.screen.width,
-      height: window.screen.height,
+      width: window.screen.width * window.devicePixelRatio,
+      height: window.screen.height * window.devicePixelRatio,
     },
   };
   return data;
