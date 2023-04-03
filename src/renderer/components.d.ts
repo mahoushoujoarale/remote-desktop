@@ -22,4 +22,7 @@ declare module '@vue/runtime-core' {
     LevitatingBall: typeof import('./src/components/LevitatingBall/index.vue')['default']
     RemoteWindow: typeof import('./src/components/RemoteWindow/index.vue')['default']
   }
+  export interface ComponentCustomProperties {
+    vLoading: typeof import('element-plus/es')['ElLoadingDirective']
+  }
 }

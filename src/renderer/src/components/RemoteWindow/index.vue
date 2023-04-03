@@ -12,8 +12,12 @@ const emit = defineEmits<{
   (e: 'handleKeyDown', data: IKeyDownData): void;
 }>();
 
-const video = ref();
+const video = ref<HTMLVideoElement>();
+const videoLoading = ref(true);
 
+const cancelLoading = () => {
+  videoLoading.value = false;
+};
 const handleMouseClick = (event: MouseEvent) => {
   const data = getMouseClickData(event);
   emit('handleMouseClick', data);
@@ -28,6 +32,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
 };
 
 onMounted(() => {
+  video.value?.addEventListener('canplaythrough', cancelLoading, { once: true });
   video.value?.addEventListener('click', handleMouseClick);
   document.addEventListener('wheel', handleScroll);
   document.addEventListener('keydown', handleKeyDown);
@@ -41,7 +46,7 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="container">
-    <div class="remote-window">
+    <div v-loading="videoLoading" element-loading-background="#2f3241" class="remote-window">
       <video id="remote-video" ref="video" :srcObject="videoSrcObject" autoplay></video>
     </div>
   </div>

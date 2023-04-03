@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ElMessage } from 'element-plus';
 import { ref } from 'vue';
 
 const props = defineProps<{
@@ -12,16 +13,37 @@ const remoteId = ref('');
 const tipsContent = ref('点击复制');
 
 const handleConnect = () => {
+  if (remoteId.value === props.userId) {
+    ElMessage.closeAll();
+    ElMessage.error('不能使用自己的ID');
+    return;
+  }
+  if (remoteId.value === '') {
+    ElMessage.closeAll();
+    ElMessage.error('请输入ID');
+    return;
+  }
   emit('handleConnect', remoteId.value);
 };
-const handleCopy = () => {
+const handleCopy = (event: MouseEvent) => {
   try {
     navigator.clipboard.writeText(props.userId);
     tipsContent.value = '已复制';
   } catch (error) {
     console.log(error);
   }
-}
+  event.target?.addEventListener(
+    'mouseleave',
+    () => {
+      setTimeout(() => {
+        tipsContent.value = '点击复制';
+      }, 300);
+    },
+    {
+      once: true,
+    },
+  );
+};
 </script>
 
 <template>

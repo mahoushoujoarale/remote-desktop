@@ -1,9 +1,4 @@
-import Peer from 'peerjs';
-import io from 'socket.io-client';
-
-// todo: 这里有问题，这两个应该在app的mouted里边初始化
-export const socket = io('http://localhost:8010');
-const peerOptions = {
+export const peerOption = {
   host: 'localhost',
   port: 8010,
   path: '/peerjs',
@@ -32,4 +27,5 @@ const peerOptions = {
     ],
   },
 };
-export const peer = new Peer(peerOptions);
+
+export const serverUrl = 'http://localhost:8010';
