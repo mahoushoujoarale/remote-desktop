@@ -1,4 +1,4 @@
-import { DesktopCapturerSource } from "electron";
+import { DesktopCapturerSource } from 'electron';
 
 export async function getStreamBySources(sources: DesktopCapturerSource[]) {
   try {

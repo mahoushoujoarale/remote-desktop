@@ -1,4 +1,4 @@
-import { IMouseClickData, IKeyDownData, IScrollData } from "./type";
+import { IMouseClickData, IKeyDownData, IScrollData } from './type';
 
 export const getMouseClickData = (event: MouseEvent) => {
   const video = event.target as HTMLVideoElement;
@@ -21,7 +21,7 @@ export const getScrollData = (event: WheelEvent) => {
     deltaY: event.deltaY,
   };
   return data;
-}
+};
 
 export const getKeyDownData = (event: KeyboardEvent) => {
   const data: IKeyDownData = {

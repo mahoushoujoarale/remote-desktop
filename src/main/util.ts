@@ -1,5 +1,5 @@
-import { desktopCapturer } from "electron";
-import { IKeyDownData, IMouseClickData, IScrollData } from "./type";
+import { desktopCapturer } from 'electron';
+import { IKeyDownData, IMouseClickData, IScrollData } from './type';
 import robot from 'robotjs';
 
 export const getDesktopCaptureSource = async () => {
@@ -18,8 +18,8 @@ export const getDesktopCaptureSource = async () => {
 export const doMouseClick = (data: IMouseClickData) => {
   const { offset, video } = data;
   // 这里用robotjs拿到屏幕尺寸才对，其他方法会有各种兼容性问题
-  const x: number = offset.x / video.width * robot.getScreenSize().width;
-  const y: number = offset.y / video.height * robot.getScreenSize().height;
+  const x: number = (offset.x / video.width) * robot.getScreenSize().width;
+  const y: number = (offset.y / video.height) * robot.getScreenSize().height;
   robot.moveMouse(x, y);
   robot.mouseClick();
 };

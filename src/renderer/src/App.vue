@@ -25,7 +25,8 @@ const handleConnect = (id: string) => {
     userInfo: {
       userId: userId.value,
       peerId: peerId.value,
-    }, remoteId: remoteId.value
+    },
+    remoteId: remoteId.value,
   });
 };
 const handleDisconnect = (isReceived = false) => {
@@ -40,20 +41,20 @@ const handleMouseClick = (data: IMouseClickData) => {
   socket.emit('mouseclick', { remoteId: remoteId.value, data });
 };
 const handleScroll = (data: IScrollData) => {
-  socket.emit("scroll", { remoteId: remoteId.value, data });
+  socket.emit('scroll', { remoteId: remoteId.value, data });
 };
 const handleKeyDown = (data: IKeyDownData) => {
   socket.emit('keydown', { remoteId: remoteId.value, data });
 };
 
 onMounted(() => {
-  peer.on("open", (id) => {
+  peer.on('open', id => {
     peerId.value = id;
     // 在没触发这个事件之前需要加loading
   });
-  peer.on("call", async (call) => {
+  peer.on('call', async call => {
     call.answer();
-    call.on('stream', (stream) => {
+    call.on('stream', stream => {
       videoSrcObject.value = stream;
       startTime.value = Date.now();
       connectionType.value = ConnectionType.Controller;
@@ -65,11 +66,11 @@ onMounted(() => {
   socket.on('connect', () => {
     socket.emit('join', userId.value);
   });
-  socket.on("connect_error", (e) => {
-    console.log("Socket connection error, retrying..." + e);
+  socket.on('connect_error', e => {
+    console.log('Socket connection error, retrying...' + e);
     setTimeout(() => socket.connect(), 5000);
   });
-  socket.on('remoteconnect', async (remoteInfo) => {
+  socket.on('remoteconnect', async remoteInfo => {
     const stream = await window.api.getMediaStream();
     if (stream) {
       call.value = peer.call(remoteInfo.peerId, stream);
@@ -100,16 +101,12 @@ onMounted(() => {
   socket.on('keydown', (data: IKeyDownData) => {
     window.api.doKeyDown(data);
   });
-})
+});
 </script>
 
 <template>
   <div class="common-layout">
-    <Home
-      v-if="!showWindow"
-      :userId="userId"
-      @handleConnect="handleConnect"
-    />
+    <Home v-if="!showWindow" :userId="userId" @handleConnect="handleConnect" />
     <RemoteWindow
       v-else
       :videoSrcObject="videoSrcObject"

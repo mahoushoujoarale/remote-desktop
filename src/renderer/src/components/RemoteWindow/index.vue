@@ -14,15 +14,15 @@ const emit = defineEmits<{
 
 const video = ref();
 
-const handleMouseClick = (event) => {
+const handleMouseClick = (event: MouseEvent) => {
   const data = getMouseClickData(event);
-  emit('handleMouseClick',data);
+  emit('handleMouseClick', data);
 };
-const handleScroll = (event) => {
+const handleScroll = (event: WheelEvent) => {
   const data = getScrollData(event);
   emit('handleScroll', data);
-}
-const handleKeyDown = (event) => {
+};
+const handleKeyDown = (event: KeyboardEvent) => {
   const data = getKeyDownData(event);
   emit('handleKeyDown', data);
 };

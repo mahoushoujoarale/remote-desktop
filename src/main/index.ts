@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
 import { doKeyDown, doMouseClick, doScroll, getDesktopCaptureSource } from './util';
 import { IKeyDownData, IMouseClickData, IScrollData } from './type';
-ipcMain.handle('getDesktopCaptureSource', getDesktopCaptureSource)
+ipcMain.handle('getDesktopCaptureSource', getDesktopCaptureSource);
 
 function createWindow(): void {
   const mainWindow = new BrowserWindow({
@@ -26,7 +26,7 @@ function createWindow(): void {
     mainWindow.show();
   });
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
+  mainWindow.webContents.setWindowOpenHandler(details => {
     shell.openExternal(details.url);
     return { action: 'deny' };
   });
