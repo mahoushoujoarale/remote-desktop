@@ -7,10 +7,6 @@ export interface IMouseClickData {
     width: number,
     height: number,
   },
-  screen: {
-    width: number,
-    height: number,
-  }
 }
 
 export interface IScrollData {

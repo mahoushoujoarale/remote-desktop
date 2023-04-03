@@ -11,11 +11,6 @@ export const getMouseClickData = (event: MouseEvent) => {
       width: video.offsetWidth,
       height: video.offsetHeight,
     },
-    // 这里的screen应该被覆盖
-    screen: {
-      width: window.screen.width * window.devicePixelRatio,
-      height: window.screen.height * window.devicePixelRatio,
-    },
   };
   return data;
 };
