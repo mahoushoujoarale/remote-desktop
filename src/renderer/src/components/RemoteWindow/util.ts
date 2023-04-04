@@ -8,7 +8,12 @@ export const getMouseData = (event: MouseEvent) => {
   } else if (event.buttons === 2) {
     button = 'right';
   }
-  const type = event.type === 'mousedown' ? 'down' : 'up';
+  let type = 'down';
+  if (event.type === 'mouseup') {
+    type = 'up';
+  } else if (event.type === 'mousemove') {
+    type = 'move';
+  }
   const data: IMouseData = {
     offset: {
       x: event.offsetX,

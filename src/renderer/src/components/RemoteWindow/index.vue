@@ -2,6 +2,7 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue';
 import { getMouseData, getScrollData, getKeyData } from './util';
 import { IKeyData, IScrollData, IMouseData } from './type';
+import { throttle } from 'lodash';
 
 defineProps<{
   videoSrcObject: object;
@@ -30,11 +31,13 @@ const handleKey = (event: KeyboardEvent) => {
   const data = getKeyData(event);
   emit('handleKey', data);
 };
+const handleMousemove = () => throttle(handleMouse, 100);
 
 onMounted(() => {
   video.value?.addEventListener('canplaythrough', cancelLoading, { once: true });
   video.value?.addEventListener('mousedown', handleMouse);
   video.value?.addEventListener('mouseup', handleMouse);
+  video.value?.addEventListener('mousemove', handleMousemove);
   document.addEventListener('wheel', handleScroll);
   document.addEventListener('keydown', handleKey);
   document.addEventListener('keyup', handleKey);
@@ -42,6 +45,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   video.value?.removeEventListener('mousedown', handleMouse);
   video.value?.removeEventListener('mouseup', handleMouse);
+  video.value?.removeEventListener('mousemove', handleMousemove);
   document.removeEventListener('wheel', handleScroll);
   document.removeEventListener('keydown', handleKey);
   document.removeEventListener('keyup', handleKey);
