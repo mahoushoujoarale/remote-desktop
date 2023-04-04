@@ -28,7 +28,7 @@ module.exports = {
     'vue/multi-word-component-names': 'off',
     'vue/attribute-hyphenation': 'off',
     'vue/v-on-event-hyphenation': 'off',
-    "@typescript-eslint/no-unused-vars": 'off',
+    '@typescript-eslint/no-unused-vars': 'off',
   },
   overrides: [
     {

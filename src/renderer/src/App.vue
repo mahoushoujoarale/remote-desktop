@@ -57,11 +57,11 @@ const handleConnect = (id: string) => {
   isTimeout.value = false;
   // 控制端发送控制请求
   socket.emit('remoteconnect', {
+    remoteId: remoteId.value,
     userInfo: {
       userId: userId.value,
       peerId: peerId.value,
     },
-    remoteId: remoteId.value,
   });
   setTimeout(() => {
     if (!connectionSettled.value) {
