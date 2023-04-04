@@ -1,4 +1,4 @@
-export interface IMouseClickData {
+export interface IMouseData {
   offset: {
     x: number;
     y: number;
@@ -7,6 +7,8 @@ export interface IMouseClickData {
     width: number;
     height: number;
   };
+  type: string;
+  button: string;
 }
 
 export interface IScrollData {
@@ -14,10 +16,11 @@ export interface IScrollData {
   deltaY: number;
 }
 
-export interface IKeyDownData {
+export interface IKeyData {
   key: string;
   meta: boolean;
   alt: boolean;
   ctrl: boolean;
   shift: boolean;
+  type: string;
 }

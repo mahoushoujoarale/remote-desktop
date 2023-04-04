@@ -2,8 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron';
 import { join } from 'path';
 import { electronApp, optimizer, is } from '@electron-toolkit/utils';
 import icon from '../../resources/icon.png?asset';
-import { doKeyDown, doMouseClick, doScroll, getDesktopCaptureSource } from './util';
-import { IKeyDownData, IMouseClickData, IScrollData } from './type';
+import { doKey, doMouse, doScroll, getDesktopCaptureSource } from './util';
+import { IKeyData, IMouseData, IScrollData } from './type';
 ipcMain.handle('getDesktopCaptureSource', getDesktopCaptureSource);
 
 function createWindow(): void {
@@ -52,16 +52,16 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  ipcMain.on('mouse-click', (_event, data: IMouseClickData) => {
-    doMouseClick(data);
+  ipcMain.on('mouse-click', (_event, data: IMouseData) => {
+    doMouse(data);
   });
 
   ipcMain.on('scroll', (_event, data: IScrollData) => {
     doScroll(data);
   });
 
-  ipcMain.on('key-down', (_event, data: IKeyDownData) => {
-    doKeyDown(data);
+  ipcMain.on('key-down', (_event, data: IKeyData) => {
+    doKey(data);
   });
 });
 

@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { getMouseClickData, getScrollData, getKeyDownData } from './util';
-import { IKeyDownData, IScrollData, IMouseClickData } from './type';
+import { getMouseData, getScrollData, getKeyData } from './util';
+import { IKeyData, IScrollData, IMouseData } from './type';
 
 defineProps<{
   videoSrcObject: object;
 }>();
 const emit = defineEmits<{
-  (e: 'handleMouseClick', data: IMouseClickData): void;
+  (e: 'handleMouse', data: IMouseData): void;
   (e: 'handleScroll', data: IScrollData): void;
-  (e: 'handleKeyDown', data: IKeyDownData): void;
+  (e: 'handleKey', data: IKeyData): void;
 }>();
 
 const video = ref<HTMLVideoElement>();
@@ -18,29 +18,33 @@ const videoLoading = ref(true);
 const cancelLoading = () => {
   videoLoading.value = false;
 };
-const handleMouseClick = (event: MouseEvent) => {
-  const data = getMouseClickData(event);
-  emit('handleMouseClick', data);
+const handleMouse = (event: MouseEvent) => {
+  const data = getMouseData(event);
+  emit('handleMouse', data);
 };
 const handleScroll = (event: WheelEvent) => {
   const data = getScrollData(event);
   emit('handleScroll', data);
 };
-const handleKeyDown = (event: KeyboardEvent) => {
-  const data = getKeyDownData(event);
-  emit('handleKeyDown', data);
+const handleKey = (event: KeyboardEvent) => {
+  const data = getKeyData(event);
+  emit('handleKey', data);
 };
 
 onMounted(() => {
   video.value?.addEventListener('canplaythrough', cancelLoading, { once: true });
-  video.value?.addEventListener('click', handleMouseClick);
+  video.value?.addEventListener('mousedown', handleMouse);
+  video.value?.addEventListener('mouseup', handleMouse);
   document.addEventListener('wheel', handleScroll);
-  document.addEventListener('keydown', handleKeyDown);
+  document.addEventListener('keydown', handleKey);
+  document.addEventListener('keyup', handleKey);
 });
 onBeforeUnmount(() => {
-  video.value?.removeEventListener('click', handleMouseClick);
+  video.value?.removeEventListener('mousedown', handleMouse);
+  video.value?.removeEventListener('mouseup', handleMouse);
   document.removeEventListener('wheel', handleScroll);
-  document.removeEventListener('keydown', handleKeyDown);
+  document.removeEventListener('keydown', handleKey);
+  document.removeEventListener('keyup', handleKey);
 });
 </script>
 

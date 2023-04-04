@@ -2,7 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron';
 import { electronAPI } from '@electron-toolkit/preload';
 import { getStreamBySources } from './util';
 import { IApi } from './type';
-import { IKeyDownData, IMouseClickData, IScrollData } from '../main/type';
+import { IKeyData, IMouseData, IScrollData } from '../main/type';
 
 // Custom APIs for renderer
 const api: IApi = {
@@ -10,13 +10,13 @@ const api: IApi = {
     const sources = await ipcRenderer.invoke('getDesktopCaptureSource');
     return getStreamBySources(sources);
   },
-  doMouseClick: (data: IMouseClickData) => {
+  doMouse: (data: IMouseData) => {
     ipcRenderer.send('mouse-click', data);
   },
   doScroll: (data: IScrollData) => {
     ipcRenderer.send('scroll', data);
   },
-  doKeyDown: (data: IKeyDownData) => {
+  doKey: (data: IKeyData) => {
     ipcRenderer.send('key-down', data);
   },
 };

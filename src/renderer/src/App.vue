@@ -4,7 +4,7 @@ import Home from './components/Home/index.vue';
 import RemoteWindow from './components/RemoteWindow/index.vue';
 import LevitatingBall from './components/LevitatingBall/index.vue';
 import Peer, { MediaConnection } from 'peerjs';
-import { IMouseClickData, IKeyDownData, IScrollData } from './components/RemoteWindow/type';
+import { IMouseData, IKeyData, IScrollData } from './components/RemoteWindow/type';
 import { ConnectionType } from './type';
 import { io } from 'socket.io-client';
 import { ElMessage } from 'element-plus';
@@ -81,14 +81,14 @@ const handleDisconnect = (isReceived = false) => {
   connectionType.value = ConnectionType.NotConnected;
   remoteId.value = '';
 };
-const handleMouseClick = (data: IMouseClickData) => {
-  socket.emit('mouseclick', { remoteId: remoteId.value, data });
+const handleMouse = (data: IMouseData) => {
+  socket.emit('mouse', { remoteId: remoteId.value, data });
 };
 const handleScroll = (data: IScrollData) => {
   socket.emit('scroll', { remoteId: remoteId.value, data });
 };
-const handleKeyDown = (data: IKeyDownData) => {
-  socket.emit('keydown', { remoteId: remoteId.value, data });
+const handleKey = (data: IKeyData) => {
+  socket.emit('key', { remoteId: remoteId.value, data });
 };
 const releaseResource = () => {
   socket.close();
@@ -167,14 +167,14 @@ onMounted(() => {
     }
   });
   // 傀儡端收到控制指令
-  socket.on('mouseclick', (data: IMouseClickData) => {
-    window.api.doMouseClick(data);
+  socket.on('mouse', (data: IMouseData) => {
+    window.api.doMouse(data);
   });
   socket.on('scroll', (data: IScrollData) => {
     window.api.doScroll(data);
   });
-  socket.on('keydown', (data: IKeyDownData) => {
-    window.api.doKeyDown(data);
+  socket.on('key', (data: IKeyData) => {
+    window.api.doKey(data);
   });
 
   window.addEventListener('beforeunload', releaseResource);
@@ -197,9 +197,9 @@ onBeforeUnmount(() => {
       v-else
       :videoSrcObject="videoSrcObject"
       @handleDisconnect="handleDisconnect"
-      @handleMouseClick="handleMouseClick"
+      @handleMouse="handleMouse"
       @hadnleScroll="handleScroll"
-      @handleKeyDown="handleKeyDown"
+      @handleKey="handleKey"
     />
     <LevitatingBall
       v-if="connectionType !== ConnectionType.NotConnected"
