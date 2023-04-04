@@ -75,9 +75,10 @@ const handleConnect = (id: string) => {
   }, 10000);
 };
 const handleDisconnect = (isReceived = false) => {
+  console.log('disconnect');
   if (!isReceived) {
     // 通知另一方断开连接
-    socket.emit('remotedisconnected', remoteId.value);
+    socket.emit('remotedisconnect', remoteId.value);
   }
   showWindow.value = false;
   connectionType.value = ConnectionType.NotConnected;
@@ -167,7 +168,7 @@ onMounted(() => {
     connectionType.value = ConnectionType.Client;
   });
   // 接收到另一端发来的断开连接通知
-  socket.on('remotedisconnected', () => {
+  socket.on('remotedisconnect', () => {
     handleDisconnect(true);
     ElMessage.closeAll();
     ElMessage.warning('连接已被对方断开');
@@ -186,10 +187,6 @@ onMounted(() => {
     window.api.doKey(data);
   });
 
-  // window.electron.ipcRenderer.on('window-closing', () => {
-  //   releaseResource();
-  //   window.electron.ipcRenderer.send('close-window');
-  // });
   window.onbeforeunload = releaseResource;
 });
 </script>
@@ -205,7 +202,6 @@ onMounted(() => {
     <RemoteWindow
       v-else
       :videoSrcObject="videoSrcObject"
-      @handleDisconnect="handleDisconnect"
       @handleMouse="handleMouse"
       @hadnleScroll="handleScroll"
       @handleKey="handleKey"
