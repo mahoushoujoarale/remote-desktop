@@ -75,7 +75,6 @@ const handleConnect = (id: string) => {
   }, 10000);
 };
 const handleDisconnect = (isReceived = false) => {
-  console.log('disconnect');
   if (!isReceived) {
     // 通知另一方断开连接
     socket.emit('remotedisconnect', remoteId.value);
@@ -94,8 +93,6 @@ const handleKey = (data: IKeyData) => {
   socket.emit('key', { remoteId: remoteId.value, data });
 };
 const releaseResource = () => {
-  handleDisconnect();
-  socket.close();
   peer.destroy();
 };
 
