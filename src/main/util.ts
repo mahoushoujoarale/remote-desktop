@@ -20,10 +20,8 @@ export const doMouse = (data: IMouseData) => {
   // 这里用robotjs拿到屏幕尺寸才对，其他方法会有各种兼容性问题
   const x: number = (offset.x / video.width) * robot.getScreenSize().width;
   const y: number = (offset.y / video.height) * robot.getScreenSize().height;
-  if (type === 'move') {
-    robot.moveMouseSmooth(x, y);
-  } else {
-    robot.moveMouse(x, y);
+  robot.moveMouse(x, y);
+  if (type !== 'move') {
     robot.mouseToggle(type, button);
   }
 };

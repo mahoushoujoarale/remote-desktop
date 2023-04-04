@@ -6,7 +6,7 @@ import { doKey, doMouse, doScroll, getDesktopCaptureSource } from './util';
 import { IKeyData, IMouseData, IScrollData } from './type';
 ipcMain.handle('getDesktopCaptureSource', getDesktopCaptureSource);
 
-function createWindow(): void {
+function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1080,
     height: 720,
@@ -36,6 +36,8 @@ function createWindow(): void {
   } else {
     mainWindow.loadFile(join(__dirname, '../renderer/index.html'));
   }
+
+  return mainWindow;
 }
 
 app.whenReady().then(() => {
@@ -46,10 +48,10 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  createWindow();
+  let window = createWindow();
 
   app.on('activate', function () {
-    if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    if (BrowserWindow.getAllWindows().length === 0) window = createWindow();
   });
 
   ipcMain.on('mouse-click', (_event, data: IMouseData) => {
@@ -63,6 +65,18 @@ app.whenReady().then(() => {
   ipcMain.on('key-down', (_event, data: IKeyData) => {
     doKey(data);
   });
+
+  // const handleWindowClose = event => {
+  //   event.preventDefault();
+  //   window.webContents.send('window-closing');
+  // };
+
+  // window.on('close', handleWindowClose);
+
+  // ipcMain.on('close-window', () => {
+  //   window.removeListener('close', handleWindowClose);
+  //   window.close();
+  // });
 });
 
 app.on('window-all-closed', () => {

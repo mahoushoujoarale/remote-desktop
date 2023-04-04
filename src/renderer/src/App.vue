@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import Home from './components/Home/index.vue';
 import RemoteWindow from './components/RemoteWindow/index.vue';
 import LevitatingBall from './components/LevitatingBall/index.vue';
@@ -25,13 +25,14 @@ const isConnectted = computed(() => connectionType.value !== ConnectionType.NotC
 const isTimeout = ref(false);
 const peer = new Peer(peerOption);
 const socket = io(serverUrl);
+const connectionSettled = ref(false);
 
 peer.on('open', id => {
   peerId.value = id;
   console.log('peer init');
 });
 peer.on('error', e => {
-  console.log('Peer Init error, retrying...' + e);
+  console.log('Peer error, retrying...' + e);
   setTimeout(() => {
     peer.reconnect();
   }, 500);
@@ -50,6 +51,7 @@ const handleConnect = (id: string) => {
     ElMessage.warning('服务暂不可用，请稍等');
     return;
   }
+  connectionSettled.value = false;
   remoteId.value = id;
   shouldLoading.value = true;
   isTimeout.value = false;
@@ -62,7 +64,7 @@ const handleConnect = (id: string) => {
     remoteId: remoteId.value,
   });
   setTimeout(() => {
-    if (connectionType.value === ConnectionType.NotConnected) {
+    if (!connectionSettled.value) {
       shouldLoading.value = false;
       isTimeout.value = true;
       ElMessage.closeAll();
@@ -70,7 +72,7 @@ const handleConnect = (id: string) => {
       // 控制端告知傀儡端超时
       socket.emit('remotetimeout', remoteId.value);
     }
-  }, 5000);
+  }, 10000);
 };
 const handleDisconnect = (isReceived = false) => {
   if (!isReceived) {
@@ -91,6 +93,7 @@ const handleKey = (data: IKeyData) => {
   socket.emit('key', { remoteId: remoteId.value, data });
 };
 const releaseResource = () => {
+  handleDisconnect();
   socket.close();
   peer.destroy();
 };
@@ -103,6 +106,7 @@ onMounted(() => {
     call.on('stream', stream => {
       videoSrcObject.value = stream;
       startTime.value = Date.now();
+      connectionSettled.value = true;
       connectionType.value = ConnectionType.Controller;
       shouldLoading.value = false;
       showWindow.value = true;
@@ -115,6 +119,7 @@ onMounted(() => {
   socket.on('remotenotexist', () => {
     if (isTimeout.value) return;
     shouldLoading.value = false;
+    connectionSettled.value = true;
     ElMessage.closeAll();
     ElMessage.error('远程ID不存在');
   });
@@ -135,17 +140,19 @@ onMounted(() => {
       socket.emit('remoteconnect_error', remoteInfo.userId);
     }
   });
-  // 控制端收到傀儡端已被控制的消息
+  // 控制端收到傀儡端已被占用的消息
   socket.on('remoteisconnected', () => {
     if (isTimeout.value) return;
     shouldLoading.value = false;
+    connectionSettled.value = true;
     ElMessage.closeAll();
-    ElMessage.warning('远程机已被其它机器控制');
+    ElMessage.warning('远程机已被占用');
   });
   // 控制端收到连接错误的消息
   socket.on('remoteconnect_error', () => {
     if (isTimeout.value) return;
     shouldLoading.value = false;
+    connectionSettled.value = true;
     ElMessage.closeAll();
     ElMessage.error('连接异常，请稍后重试');
   });
@@ -162,6 +169,8 @@ onMounted(() => {
   // 接收到另一端发来的断开连接通知
   socket.on('remotedisconnected', () => {
     handleDisconnect(true);
+    ElMessage.closeAll();
+    ElMessage.warning('连接已被对方断开');
     if (call.value) {
       call.value.close();
     }
@@ -177,11 +186,11 @@ onMounted(() => {
     window.api.doKey(data);
   });
 
-  window.addEventListener('beforeunload', releaseResource);
-});
-
-onBeforeUnmount(() => {
-  releaseResource();
+  // window.electron.ipcRenderer.on('window-closing', () => {
+  //   releaseResource();
+  //   window.electron.ipcRenderer.send('close-window');
+  // });
+  window.onbeforeunload = releaseResource;
 });
 </script>
 

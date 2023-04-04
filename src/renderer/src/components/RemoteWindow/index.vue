@@ -31,7 +31,7 @@ const handleKey = (event: KeyboardEvent) => {
   const data = getKeyData(event);
   emit('handleKey', data);
 };
-const handleMousemove = () => throttle(handleMouse, 100);
+const handleMousemove = throttle(handleMouse, 50);
 
 onMounted(() => {
   video.value?.addEventListener('canplaythrough', cancelLoading, { once: true });
