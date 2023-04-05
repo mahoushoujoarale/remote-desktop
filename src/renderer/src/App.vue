@@ -44,7 +44,7 @@ peer.on('error', e => {
 socket.on('connect', () => {
   socket.emit('join', userId.value);
 });
-socket.on('connect_error', e => {
+const handleSocketError = (e) => {
   console.log('Socket connection error, retrying...' + e);
   handleDisconnect(true);
   ElMessage.closeAll();
@@ -53,7 +53,9 @@ socket.on('connect_error', e => {
     call.value.close();
   }
   setTimeout(() => socket.connect(), 5000);
-});
+};
+socket.on('connect_error', handleSocketError);
+socket.on('disconnect', handleSocketError);
 
 const handleConnect = (id: string) => {
   if (peerId.value === '') {
@@ -210,7 +212,7 @@ onMounted(() => {
       v-else
       :videoSrcObject="videoSrcObject"
       @handleMouse="handleMouse"
-      @hadnleScroll="handleScroll"
+      @handleScroll="handleScroll"
       @handleKey="handleKey"
     />
     <LevitatingBall

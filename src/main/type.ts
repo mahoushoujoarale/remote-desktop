@@ -17,7 +17,7 @@ export interface IScrollData {
     deltaX: number;
     deltaY: number;
   };
-  video: {
+  screen: {
     width: number;
     height: number;
   };

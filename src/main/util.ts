@@ -31,9 +31,9 @@ export const doMouse = (data: IMouseData) => {
 };
 
 export const doScroll = (data: IScrollData) => {
-  const { video, delta } = data;
-  const x: number = (delta.deltaX / video.width) * robot.getScreenSize().width;
-  const y: number = (delta.deltaY / video.height) * robot.getScreenSize().height;
+  const { screen, delta } = data;
+  const x: number = delta.deltaX * Math.floor(robot.getScreenSize().width / screen.width);
+  const y: number = delta.deltaY * Math.floor(robot.getScreenSize().height / screen.height);
   robot.scrollMouse(x, y);
 };
 
