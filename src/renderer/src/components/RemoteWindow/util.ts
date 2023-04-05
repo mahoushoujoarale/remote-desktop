@@ -25,6 +25,7 @@ export const getMouseData = (event: MouseEvent) => {
     },
     type,
     button,
+    isDrag: false,
   };
   return data;
 };

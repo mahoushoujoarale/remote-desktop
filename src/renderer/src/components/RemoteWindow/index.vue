@@ -15,12 +15,18 @@ const emit = defineEmits<{
 
 const video = ref<HTMLVideoElement>();
 const videoLoading = ref(true);
+const clickStartTime = ref(Date.now());
 
 const cancelLoading = () => {
   videoLoading.value = false;
 };
 const handleMouse = (event: MouseEvent) => {
   const data = getMouseData(event);
+  if (data.type === 'up') {
+    clickStartTime.value = Date.now();
+  } else if (data.type === 'down') {
+    data.isDrag = Date.now() - clickStartTime.value > 200;
+  }
   emit('handleMouse', data);
 };
 const handleScroll = (event: WheelEvent) => {

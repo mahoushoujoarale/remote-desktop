@@ -16,11 +16,15 @@ export const getDesktopCaptureSource = async () => {
 };
 
 export const doMouse = (data: IMouseData) => {
-  const { offset, video, type, button } = data;
+  const { offset, video, type, button, isDrag } = data;
   // 这里用robotjs拿到屏幕尺寸才对，其他方法会有各种兼容性问题
   const x: number = (offset.x / video.width) * robot.getScreenSize().width;
   const y: number = (offset.y / video.height) * robot.getScreenSize().height;
-  robot.moveMouse(x, y);
+  if (isDrag) {
+    robot.dragMouse(x, y);
+  } else {
+    robot.moveMouse(x, y);
+  }
   if (type !== 'move') {
     robot.mouseToggle(type, button);
   }

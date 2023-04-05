@@ -9,6 +9,7 @@ export interface IMouseData {
   };
   type: string;
   button: string;
+  isDrag: boolean;
 }
 
 export interface IScrollData {
