@@ -22,9 +22,9 @@ const cancelLoading = () => {
 };
 const handleMouse = (event: MouseEvent) => {
   const data = getMouseData(event);
-  if (data.type === 'up') {
+  if (data.type === 'down') {
     clickStartTime.value = Date.now();
-  } else if (data.type === 'down') {
+  } else if (data.type === 'up') {
     data.isDrag = Date.now() - clickStartTime.value > 200;
   }
   emit('handleMouse', data);

@@ -46,6 +46,12 @@ socket.on('connect', () => {
 });
 socket.on('connect_error', e => {
   console.log('Socket connection error, retrying...' + e);
+  handleDisconnect(true);
+  ElMessage.closeAll();
+  ElMessage.warning('网络异常，连接已断开');
+  if (call.value) {
+    call.value.close();
+  }
   setTimeout(() => socket.connect(), 5000);
 });
 
@@ -78,8 +84,8 @@ const handleConnect = (id: string) => {
     }
   }, 10000);
 };
-const handleDisconnect = (isReceived = false) => {
-  if (!isReceived) {
+const handleDisconnect = (ignore = false) => {
+  if (!ignore) {
     // 通知另一方断开连接
     socket.emit('remotedisconnect', remoteId.value);
   }

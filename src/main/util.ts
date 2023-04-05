@@ -38,10 +38,13 @@ export const doKey = (data: IKeyData) => {
   const modifiers: string[] = [];
   // 这里robotjs比较蠢，修饰符必须按照顺序添加
   if (data.shift) modifiers.push('shift');
-  if (data.ctrl) modifiers.push('ctrl');
+  if (data.ctrl) modifiers.push('control');
   if (data.alt) modifiers.push('alt');
-  if (data.meta) modifiers.push('meta');
-  const key = data.key;
+  if (data.meta) modifiers.push('command');
+  let key = data.key;
+  if (key === 'meta') {
+    key = 'command';
+  }
   try {
     robot.keyToggle(key, data.type, modifiers);
   } catch (error) {
