@@ -31,15 +31,11 @@ export const getMouseData = (event: MouseEvent) => {
 };
 
 export const getScrollData = (event: WheelEvent) => {
+  // stackoverflow上边看的黑魔法，不确定是否有用
+  const isTouchPad = Number.isInteger(event.deltaY) && Number.isInteger(event.deltaX);
   const data: IScrollData = {
-    delta: {
-      deltaX: event.deltaX,
-      deltaY: event.deltaY,
-    },
-    screen: {
-      width: window.screen.width,
-      height: window.screen.height,
-    },
+    deltaX: isTouchPad ? -event.deltaX : event.deltaX,
+    deltaY: isTouchPad ? -event.deltaY : event.deltaY,
   };
   return data;
 };

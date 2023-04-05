@@ -31,7 +31,6 @@ const handleMouse = (event: MouseEvent) => {
 };
 const handleScroll = throttle((event: WheelEvent) => {
   const data = getScrollData(event);
-  console.log('scroll');
   emit('handleScroll', data);
 }, 50);
 const handleKey = (event: KeyboardEvent) => {

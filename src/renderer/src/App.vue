@@ -44,7 +44,7 @@ peer.on('error', e => {
 socket.on('connect', () => {
   socket.emit('join', userId.value);
 });
-const handleSocketError = (e) => {
+const handleSocketError = e => {
   console.log('Socket connection error, retrying...' + e);
   handleDisconnect(true);
   ElMessage.closeAll();

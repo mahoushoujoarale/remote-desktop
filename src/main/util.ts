@@ -31,10 +31,8 @@ export const doMouse = (data: IMouseData) => {
 };
 
 export const doScroll = (data: IScrollData) => {
-  const { screen, delta } = data;
-  const x: number = delta.deltaX * Math.floor(robot.getScreenSize().width / screen.width);
-  const y: number = delta.deltaY * Math.floor(robot.getScreenSize().height / screen.height);
-  robot.scrollMouse(x, y);
+  const { deltaX, deltaY } = data;
+  robot.scrollMouse(deltaX, deltaY);
 };
 
 export const doKey = (data: IKeyData) => {
@@ -45,8 +43,24 @@ export const doKey = (data: IKeyData) => {
   if (data.alt) modifiers.push('alt');
   if (data.meta) modifiers.push('command');
   let key = data.key;
-  if (key === 'meta') {
-    key = 'command';
+  // 一些键特殊处理
+  switch (key) {
+    case 'meta':
+      key = 'command';
+      break;
+    case 'arrowup':
+      key = 'up';
+      break;
+    case 'arrowdown':
+      key = 'down';
+      break;
+    case 'arrowleft':
+      key = 'left';
+      break;
+    case 'arrowright':
+      key = 'right';
+      break;
+    default:
   }
   try {
     robot.keyToggle(key, data.type, modifiers);
