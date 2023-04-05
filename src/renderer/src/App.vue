@@ -48,7 +48,7 @@ const handleSocketError = e => {
   console.log('Socket connection error, retrying...' + e);
   handleDisconnect(true);
   ElMessage.closeAll();
-  ElMessage.warning('网络异常，连接已断开');
+  ElMessage.warning('网络异常，请稍后重试');
   if (call.value) {
     call.value.close();
   }
