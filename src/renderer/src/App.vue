@@ -87,20 +87,20 @@ const handleConnect = (id: string) => {
 const handleDisconnect = (ignore = false) => {
   if (!ignore) {
     // 通知另一方断开连接
-    socket.emit('remotedisconnect', remoteId.value);
+    socket.emit('remotedisconnect');
   }
   showWindow.value = false;
   connectionType.value = ConnectionType.NotConnected;
   remoteId.value = '';
 };
 const handleMouse = (data: IMouseData) => {
-  socket.emit('mouse', { remoteId: remoteId.value, data });
+  socket.emit('mouse', data);
 };
 const handleScroll = (data: IScrollData) => {
-  socket.emit('scroll', { remoteId: remoteId.value, data });
+  socket.emit('scroll', data);
 };
 const handleKey = (data: IKeyData) => {
-  socket.emit('key', { remoteId: remoteId.value, data });
+  socket.emit('key', data);
 };
 const releaseResource = () => {
   peer.destroy();
@@ -178,7 +178,7 @@ onMounted(() => {
   socket.on('remotedisconnect', () => {
     handleDisconnect(true);
     ElMessage.closeAll();
-    ElMessage.warning('连接已被对方断开');
+    ElMessage.warning('对方已断开连接');
     if (call.value) {
       call.value.close();
     }

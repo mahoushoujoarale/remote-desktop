@@ -31,9 +31,16 @@ export const getMouseData = (event: MouseEvent) => {
 };
 
 export const getScrollData = (event: WheelEvent) => {
+  const video = event.target as HTMLVideoElement;
   const data: IScrollData = {
-    deltaX: event.deltaX,
-    deltaY: event.deltaY,
+    delta: {
+      deltaX: event.deltaX,
+      deltaY: event.deltaY,
+    },
+    video: {
+      width: video.offsetWidth,
+      height: video.offsetHeight,
+    },
   };
   return data;
 };
@@ -47,6 +54,21 @@ export const getKeyData = (event: KeyboardEvent) => {
     ctrl: event.ctrlKey,
     alt: event.altKey,
     type,
+  };
+  return data;
+};
+
+export const getTouchData = (event: TouchEvent, deltaX: number, deltaY: number) => {
+  const video = event.target as HTMLVideoElement;
+  const data: IScrollData = {
+    delta: {
+      deltaX,
+      deltaY,
+    },
+    video: {
+      width: video.offsetWidth,
+      height: video.offsetHeight,
+    },
   };
   return data;
 };

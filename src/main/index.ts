@@ -52,7 +52,7 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 
-  ipcMain.on('mouse-click', (_event, data: IMouseData) => {
+  ipcMain.on('mouse', (_event, data: IMouseData) => {
     doMouse(data);
   });
 
@@ -60,7 +60,7 @@ app.whenReady().then(() => {
     doScroll(data);
   });
 
-  ipcMain.on('key-down', (_event, data: IKeyData) => {
+  ipcMain.on('key', (_event, data: IKeyData) => {
     doKey(data);
   });
 });

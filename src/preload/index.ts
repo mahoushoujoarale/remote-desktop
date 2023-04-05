@@ -11,13 +11,13 @@ const api: IApi = {
     return getStreamBySources(sources);
   },
   doMouse: (data: IMouseData) => {
-    ipcRenderer.send('mouse-click', data);
+    ipcRenderer.send('mouse', data);
   },
   doScroll: (data: IScrollData) => {
     ipcRenderer.send('scroll', data);
   },
   doKey: (data: IKeyData) => {
-    ipcRenderer.send('key-down', data);
+    ipcRenderer.send('key', data);
   },
 };
 

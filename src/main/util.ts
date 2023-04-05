@@ -31,7 +31,10 @@ export const doMouse = (data: IMouseData) => {
 };
 
 export const doScroll = (data: IScrollData) => {
-  robot.scrollMouse(data.deltaX, data.deltaY);
+  const { video, delta } = data;
+  const x: number = (delta.deltaX / video.width) * robot.getScreenSize().width;
+  const y: number = (delta.deltaY / video.height) * robot.getScreenSize().height;
+  robot.scrollMouse(x, y);
 };
 
 export const doKey = (data: IKeyData) => {

@@ -13,8 +13,14 @@ export interface IMouseData {
 }
 
 export interface IScrollData {
-  deltaX: number;
-  deltaY: number;
+  delta: {
+    deltaX: number;
+    deltaY: number;
+  };
+  video: {
+    width: number;
+    height: number;
+  };
 }
 
 export interface IKeyData {

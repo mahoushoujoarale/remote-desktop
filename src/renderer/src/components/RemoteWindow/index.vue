@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue';
-import { getMouseData, getScrollData, getKeyData } from './util';
+import { getMouseData, getScrollData, getKeyData, getTouchData } from './util';
 import { IKeyData, IScrollData, IMouseData } from './type';
 import { throttle } from 'lodash';
 
@@ -16,6 +16,8 @@ const emit = defineEmits<{
 const video = ref<HTMLVideoElement>();
 const videoLoading = ref(true);
 const clickStartTime = ref(Date.now());
+const touchStartX = ref(0);
+const touchStartY = ref(0);
 
 const cancelLoading = () => {
   videoLoading.value = false;
@@ -38,12 +40,30 @@ const handleKey = (event: KeyboardEvent) => {
   emit('handleKey', data);
 };
 const handleMousemove = throttle(handleMouse, 50);
+const handleTouchStart = (event: TouchEvent) => {
+  if (event.touches.length === 2) {
+    touchStartX.value = event.touches[0].pageX;
+    touchStartY.value = event.touches[0].pageY;
+  }
+};
+const handleTouchMove = throttle((event: TouchEvent) => {
+  if (event.touches.length === 2) {
+    const deltaX = event.touches[0].pageX - touchStartX.value;
+    const deltaY = event.touches[0].pageY - touchStartY.value;
+    const data = getTouchData(event, deltaX, deltaY);
+    emit('handleScroll', data);
+    touchStartX.value = event.touches[0].pageX;
+    touchStartY.value = event.touches[0].pageY;
+  }
+}, 50);
 
 onMounted(() => {
   video.value?.addEventListener('canplaythrough', cancelLoading, { once: true });
   video.value?.addEventListener('mousedown', handleMouse);
   video.value?.addEventListener('mouseup', handleMouse);
   video.value?.addEventListener('mousemove', handleMousemove);
+  video.value?.addEventListener('touchstart', handleTouchStart);
+  video.value?.addEventListener('touchmove', handleTouchMove);
   document.addEventListener('wheel', handleScroll);
   document.addEventListener('keydown', handleKey);
   document.addEventListener('keyup', handleKey);
@@ -52,6 +72,8 @@ onBeforeUnmount(() => {
   video.value?.removeEventListener('mousedown', handleMouse);
   video.value?.removeEventListener('mouseup', handleMouse);
   video.value?.removeEventListener('mousemove', handleMousemove);
+  video.value?.removeEventListener('touchstart', handleTouchStart);
+  video.value?.removeEventListener('touchmove', handleTouchMove);
   document.removeEventListener('wheel', handleScroll);
   document.removeEventListener('keydown', handleKey);
   document.removeEventListener('keyup', handleKey);
