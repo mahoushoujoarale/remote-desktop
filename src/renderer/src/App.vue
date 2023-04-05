@@ -23,7 +23,7 @@ const connectionType = ref(ConnectionType.NotConnected);
 const shouldLoading = ref(false);
 const isConnectted = computed(() => connectionType.value !== ConnectionType.NotConnected);
 const isTimeout = ref(false);
-const peer = new Peer(peerOption);
+let peer = new Peer(peerOption);
 const socket = io(serverUrl);
 const connectionSettled = ref(false);
 
@@ -34,7 +34,11 @@ peer.on('open', id => {
 peer.on('error', e => {
   console.log('Peer error, retrying...' + e);
   setTimeout(() => {
-    peer.reconnect();
+    if (peer.id) {
+      peer.reconnect();
+      return;
+    }
+    peer = new Peer();
   }, 500);
 });
 socket.on('connect', () => {
