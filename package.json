@@ -25,7 +25,7 @@
     "@element-plus/icons-vue": "^2.1.0",
     "element-plus": "^2.3.1",
     "peerjs": "^1.4.7",
-    "robotjs": "^0.6.0",
+    "robotjs": "https://github.com/octalmage/robotjs.git",
     "socket.io-client": "^4.6.1"
   },
   "devDependencies": {

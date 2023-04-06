@@ -38,21 +38,12 @@ export const doScroll = (data: IScrollData) => {
 export const doKey = (data: IKeyData) => {
   const modifiers: string[] = [];
   const { type, isMac, shift, ctrl, alt, meta } = data;
-  // 这里robotjs比较蠢，修饰符必须按照顺序添加
-  if (process.platform === 'darwin') {
-    if (!isMac) {
-      if (ctrl) modifiers.push('command');
-    } else {
-      if (ctrl) modifiers.push('control');
-      if (meta) modifiers.push('command');
-    }
+  // 对其他系统传到mac的做一下适配
+  if (process.platform === 'darwin' && !isMac) {
+    if (ctrl) modifiers.push('command');
   } else {
-    if (isMac) {
-      if (meta) modifiers.push('control');
-    } else {
-      if (ctrl) modifiers.push('control');
-      if (meta) modifiers.push('command');
-    }
+    if (ctrl) modifiers.push('control');
+    if (meta) modifiers.push('command');
   }
   if (shift) modifiers.push('shift');
   if (alt) modifiers.push('alt');

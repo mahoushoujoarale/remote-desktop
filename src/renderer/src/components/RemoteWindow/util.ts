@@ -31,7 +31,7 @@ export const getMouseData = (event: MouseEvent) => {
 };
 
 export const getScrollData = (event: WheelEvent) => {
-  // stackoverflow上边看的黑魔法，不确定是否有用
+  // stackoverflow上边看的黑魔法，测了一下好像是可以用
   const isTouchPad = Number.isInteger(event.deltaY) && Number.isInteger(event.deltaX);
   const data: IScrollData = {
     deltaX: isTouchPad ? -event.deltaX : event.deltaX,
