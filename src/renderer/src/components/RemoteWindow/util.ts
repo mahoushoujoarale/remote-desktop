@@ -44,6 +44,7 @@ export const getKeyData = (event: KeyboardEvent) => {
   const type = event.type === 'keydown' ? 'down' : 'up';
   const data: IKeyData = {
     key: event.key.toLowerCase(),
+    isMac: window.navigator.userAgent.includes('mac'),
     shift: event.shiftKey,
     meta: event.metaKey,
     ctrl: event.ctrlKey,

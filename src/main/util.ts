@@ -37,11 +37,25 @@ export const doScroll = (data: IScrollData) => {
 
 export const doKey = (data: IKeyData) => {
   const modifiers: string[] = [];
+  const { type, isMac, shift, ctrl, alt, meta } = data;
   // 这里robotjs比较蠢，修饰符必须按照顺序添加
-  if (data.shift) modifiers.push('shift');
-  if (data.ctrl) modifiers.push('control');
-  if (data.alt) modifiers.push('alt');
-  if (data.meta) modifiers.push('command');
+  if (process.platform === 'darwin') {
+    if (!isMac) {
+      if (ctrl) modifiers.push('command');
+    } else {
+      if (ctrl) modifiers.push('control');
+      if (meta) modifiers.push('command');
+    }
+  } else {
+    if (isMac) {
+      if (meta) modifiers.push('control');
+    } else {
+      if (ctrl) modifiers.push('control');
+      if (meta) modifiers.push('command');
+    }
+  }
+  if (shift) modifiers.push('shift');
+  if (alt) modifiers.push('alt');
   let key = data.key;
   // 一些键特殊处理
   switch (key) {
@@ -63,7 +77,7 @@ export const doKey = (data: IKeyData) => {
     default:
   }
   try {
-    robot.keyToggle(key, data.type, modifiers);
+    robot.keyToggle(key, type, modifiers);
   } catch (error) {
     console.log(key, error);
   }
