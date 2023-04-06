@@ -9,6 +9,7 @@ import { ConnectionType } from './type';
 import { io } from 'socket.io-client';
 import { ElMessage } from 'element-plus';
 import { peerOption, serverUrl } from './constant';
+import { throttle } from 'lodash';
 
 // 这俩是用来远程连接的id
 const userId = ref(`${Math.floor(Math.random() * 899999) + 100000}`);
@@ -44,7 +45,7 @@ peer.on('error', e => {
 socket.on('connect', () => {
   socket.emit('join', userId.value);
 });
-const handleSocketError = e => {
+const handleSocketError = throttle(e => {
   console.log('Socket connection error, retrying...' + e);
   handleDisconnect(true);
   ElMessage.closeAll();
@@ -53,7 +54,7 @@ const handleSocketError = e => {
     call.value.close();
   }
   setTimeout(() => socket.connect(), 5000);
-};
+}, 5000);
 socket.on('connect_error', handleSocketError);
 socket.on('disconnect', handleSocketError);
 
