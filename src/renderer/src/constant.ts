@@ -1,8 +1,8 @@
 export const peerOption = {
-  host: 'localhost',
+  host: '47.113.150.147',
   port: 8010,
   path: '/peerjs',
   secure: false,
 };
 
-export const serverUrl = 'http://localhost:8010';
+export const serverUrl = '47.113.150.147:8010';
