@@ -11,7 +11,7 @@ win:
   target: nsis
   icon: resources/icon.png
 nsis:
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
   createDesktopShortcut: true
@@ -23,10 +23,10 @@ mac:
   target: dmg
   icon: resources/icon.png
 dmg:
-  title: ${name}-${version}.${ext}
+  title: ${name}.${ext}
 linux:
-  target: AppImage
+  target: deb
   icon: resources/icon.png
-appImage:
-  artifactName: ${name}-${version}.${ext}
+deb:
+  artifactName: ${name}.${ext}
 npmRebuild: false
