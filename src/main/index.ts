@@ -11,8 +11,7 @@ function createWindow(): void {
     width: 1080,
     height: 720,
     show: false,
-    autoHideMenuBar: true,
-    fullscreen: true,
+    autoHideMenuBar: process.platform === 'darwin',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
