@@ -5,4 +5,4 @@ export const peerOption = {
   secure: false,
 };
 
-export const serverUrl = '47.113.150.147:8010';
+export const serverUrl = 'http://47.113.150.147:8010';
